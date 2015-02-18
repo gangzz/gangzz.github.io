@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | It's gangzz!]]></title>
+  <link href="http://gangzz.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://gangzz.github.io/"/>
+  <updated>2015-02-18T23:59:14+08:00</updated>
+  <id>http://gangzz.github.io/</id>
+  <author>
+    <name><![CDATA[Willard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Create the First Post]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/15/basic-setup-of-octopress/"/>
+    <updated>2015-02-15T23:25:06+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/15/basic-setup-of-octopress</id>
+    <content type="html"><![CDATA[<h1>安装</h1>
+
+<h2>前置依赖</h2>
+
+<ol>
+<li>git</li>
+<li>Ruby 1.9.3及以上版本，可以通过rbenv或RVM搞定。</li>
+<li>安装<a href="https://github.com/sstephenson/execjs">ExecJS</a>中支持的任意JavaScript运行时环境。</li>
+</ol>
+
+
+<h2>设置Octopress</h2>
+
+<p>源文件下载</p>
+
+<pre><code>git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+</code></pre>
+
+<p>解决依赖关系</p>
+
+<pre><code>gem install bundler
+rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+bundle install
+</code></pre>
+
+<p>安装默认主题的Octopress</p>
+
+<pre><code>rake install
+</code></pre>
+
+<h2>设置部署</h2>
+
+<p>这里选择的Github Pages，从略。</p>
+
+<h1>创建Blog</h1>
+
+<p>使用命令创建一篇Blog，blog文件位于source/_posts/目录下：</p>
+
+<pre><code>rake new_post[your blog name]
+</code></pre>
+
+<p>使用任意编辑器编辑blog，完成保存执行命令：</p>
+
+<pre><code>rake generate
+</code></pre>
+
+<h1>本地测试</h1>
+
+<p>使用命令启动本地服务器，端口4000.</p>
+
+<pre><code>rake preview
+</code></pre>
+
+<h1>部署</h1>
+
+<pre><code>rake deploy
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
