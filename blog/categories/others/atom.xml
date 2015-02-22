@@ -1,96 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>It&#8217;s gangzz!</title>
-  <meta name="author" content="Willard">
-
-  
-  <meta name="description" content="2. Client Registration 开始启动协议之前，Client要在权限服务器注册自己。通过何种方式注册超出了该协议讨论范围，当时通常是通过HTML页面和终端用户交互。 协议中不曾规定客户端的注册必须直接与权限服务器交互，只要权限服务器支持， &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://gangzz.github.io/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="It's gangzz!" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">It&#8217;s gangzz!</a></h1>
-  
-    <h2>A blogging about coding and life..</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="gangzz.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">首页</a></li>
-  <li><a href="/#">搜索</a></li>
-  <li><a href="/blog/categories/ruby">Ruby</a></li>
-  <li><a href="/blog/categories/life">生活</a></li>
-  <li><a href="/about.html">关于</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Category: Others | It's gangzz!]]></title>
+  <link href="http://gangzz.github.io/blog/categories/others/atom.xml" rel="self"/>
+  <link href="http://gangzz.github.io/"/>
+  <updated>2015-02-22T21:25:47+08:00</updated>
+  <id>http://gangzz.github.io/</id>
+  <author>
+    <name><![CDATA[Willard]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2015/02/18/oauth2-specification-client-registration/">Oauth2 Specification Client Registration</a></h1>
-    
-    
-      <p class="meta">
-        
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-
-
-
-<time class='entry-date' datetime='2015-02-18T11:56:02+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:56 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>2. Client Registration</h1>
+  
+  <entry>
+    <title type="html"><![CDATA[Oauth2 Specification Client Registration]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/18/oauth2-specification-client-registration/"/>
+    <updated>2015-02-18T11:56:02+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/18/oauth2-specification-client-registration</id>
+    <content type="html"><![CDATA[<h1>2. Client Registration</h1>
 
 <p>开始启动协议之前，Client要在权限服务器注册自己。通过何种方式注册超出了该协议讨论范围，当时通常是通过HTML页面和终端用户交互。</p>
 
@@ -198,148 +126,7 @@ Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3</p>
 <h3>2.3.3 未注册用户</h3>
 
 <p>该协议不排除未注册客户端的使用，但是相关讨论超出了协议范围，并且需要额外的安全分析和重新审视对互操作性的冲突。</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/15/basic-setup-of-octopress/">Create the First Post</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-02-15T23:25:06+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:25 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>安装</h1>
-
-<h2>前置依赖</h2>
-
-<ol>
-<li>git</li>
-<li>Ruby 1.9.3及以上版本，可以通过rbenv或RVM搞定。</li>
-<li>安装<a href="https://github.com/sstephenson/execjs">ExecJS</a>中支持的任意JavaScript运行时环境。</li>
-</ol>
-
-
-<h2>设置Octopress</h2>
-
-<p>源文件下载</p>
-
-<pre><code>git clone git://github.com/imathis/octopress.git octopress
-cd octopress
-</code></pre>
-
-<p>解决依赖关系</p>
-
-<pre><code>gem install bundler
-rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
-bundle install
-</code></pre>
-
-<p>安装默认主题的Octopress</p>
-
-<pre><code>rake install
-</code></pre>
-
-<h2>设置部署</h2>
-
-<p>这里选择的Github Pages，从略。</p>
-
-<h1>创建Blog</h1>
-
-<p>使用命令创建一篇Blog，blog文件位于source/_posts/目录下：</p>
-
-<pre><code>rake new_post[your blog name]
-</code></pre>
-
-<p>使用任意编辑器编辑blog，完成保存执行命令：</p>
-
-<pre><code>rake generate
-</code></pre>
-
-<h1>本地测试</h1>
-
-<p>使用命令启动本地服务器，端口4000.</p>
-
-<pre><code>rake preview
-</code></pre>
-
-<h1>部署</h1>
-
-<pre><code>rake deploy
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/02/18/oauth2-specification-client-registration/">Oauth2 Specification Client Registration</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/02/15/basic-setup-of-octopress/">Create the First Post</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Willard -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
+</feed>
