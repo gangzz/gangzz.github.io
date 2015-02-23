@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints/</loc>
+    <lastmod>2015-02-22T22:27:20+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://gangzz.github.io/blog/2015/02/18/oauth2-specification-client-registration/</loc>
     <lastmod>2015-02-18T11:56:02+08:00</lastmod>
   </url>
@@ -10,14 +14,14 @@
   </url>
   <url>
     <loc>http://gangzz.github.io/about.html</loc>
-    <lastmod>2015-02-22T21:29:40+08:00</lastmod>
+    <lastmod>2015-02-22T23:04:44+08:00</lastmod>
   </url>
   <url>
     <loc>http://gangzz.github.io/blog/archives/</loc>
-    <lastmod>2015-02-22T21:29:40+08:00</lastmod>
+    <lastmod>2015-02-22T23:04:44+08:00</lastmod>
   </url>
   <url>
     <loc>http://gangzz.github.io/</loc>
-    <lastmod>2015-02-22T21:29:40+08:00</lastmod>
+    <lastmod>2015-02-22T23:04:44+08:00</lastmod>
   </url>
 </urlset>

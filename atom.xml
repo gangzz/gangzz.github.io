@@ -4,7 +4,7 @@
   <title><![CDATA[It's gangzz!]]></title>
   <link href="http://gangzz.github.io/atom.xml" rel="self"/>
   <link href="http://gangzz.github.io/"/>
-  <updated>2015-02-22T21:29:40+08:00</updated>
+  <updated>2015-02-22T23:04:44+08:00</updated>
   <id>http://gangzz.github.io/</id>
   <author>
     <name><![CDATA[Willard]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Oauth2 Specification Protocol Endpoints]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints/"/>
+    <updated>2015-02-22T22:27:20+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints</id>
+    <content type="html"><![CDATA[<h1>3 Protocol Endpoints（协议端点）</h1>
+
+<p>在授权过程中使用到了两个端点：</p>
+
+<ul>
+<li>授权端点：客户端通过资源拥有者的重定向获得授权信息。</li>
+<li>Token端点：客户端向权限服务器获取access token。</li>
+</ul>
+
+
+<p>还存在一个client的端点：</p>
+
+<ul>
+<li>重定向端点：权限服务器向客户端返回授权的凭证。</li>
+</ul>
+
+
+<h2>3.1 Authorization Endpoint（授权端点）</h2>
+
+<p>授权端点是权限服务器和资源拥有者交互以便获得授权信息的端点。权限服务器必须验证资源拥有者的身份，通过何种方式（用户名、密码，会话cookie）验证超出该协议范围。</p>
+
+<p>Client通过何种方式获取权限服务器授权端点的路径超出了讨论范围，不过一般都会在权限服务器的文档中说明。</p>
+
+<p>端点的URI可能包含一个&#8221;application/x-www-form-urlencoded&#8221;格式的查询组件，当添加额外参数时必须保留这个组件。端点URI中不能包括不完整的查询组件。</p>
+
+<p>由于发往授权端点的请求将导致明文传输的授权凭证，权限服务器必须要求客户端建立TLS的请求。</p>
+
+<p>权限服务器必须支持Http Get方法，同样可以支持POST方法。</p>
+
+<p>不包含值得参数必须忽略对待，服务器必须忽略不认识的参数。请求和响应中的参数不得出现超过一次。</p>
+
+<h3>3.3.1 响应类型</h3>
+
+<p>授权端点是为授权码类型和简化类型的授权服务的，客户端使用以下参数知会服务器其期望的授权类型：</p>
+
+<p>response_type：必须。必须是<a href="http://tools.ietf.org/html/rfc6749#section-4.1.1">章节4.1.1</a>中描述的&#8221;code&#8221;、<a href="http://tools.ietf.org/html/rfc6749#section-4.2.1">章节4.2.1</a>描述的获取access token的“token”或者<a href="http://tools.ietf.org/html/rfc6749#section-8.4">章节8.4</a>描述的已注册的扩展值之一。</p>
+
+<p>扩展响应类型可能保护一个空格(%x20)分隔的的类别，其中值是顺序无关的，这部分响应类型的意义定义在其对应的协议中。</p>
+
+<p>如果一个请求没有或者提供了不可识别的响应类型，权限服务器必须返回<a href="http://tools.ietf.org/html/rfc6749#section-4.1.2.1">4.1.2.1</a>中描述的错误。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Oauth2 Specification Client Registration]]></title>

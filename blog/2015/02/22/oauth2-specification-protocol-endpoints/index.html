@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Oauth2 Specification Protocol Endpoints - It&#8217;s gangzz!</title>
+  <meta name="author" content="Willard">
+
+  
+  <meta name="description" content="3 Protocol Endpoints（协议端点） 在授权过程中使用到了两个端点： 授权端点：客户端通过资源拥有者的重定向获得授权信息。
+Token端点：客户端向权限服务器获取access token。 还存在一个client的端点： 重定向端点：权限服务器向客户端返回授权的凭证。 3.1 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="It's gangzz!" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">It&#8217;s gangzz!</a></h1>
+  
+    <h2>A blogging about coding and life..</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gangzz.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/#">搜索</a></li>
+  <li><a href="/blog/categories/ruby">Ruby</a></li>
+  <li><a href="/blog/categories/others">其它技术</a></li>
+  <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="/about.html">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Oauth2 Specification Protocol Endpoints</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-22T22:27:20+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:27 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>3 Protocol Endpoints（协议端点）</h1>
+
+<p>在授权过程中使用到了两个端点：</p>
+
+<ul>
+<li>授权端点：客户端通过资源拥有者的重定向获得授权信息。</li>
+<li>Token端点：客户端向权限服务器获取access token。</li>
+</ul>
+
+
+<p>还存在一个client的端点：</p>
+
+<ul>
+<li>重定向端点：权限服务器向客户端返回授权的凭证。</li>
+</ul>
+
+
+<h2>3.1 Authorization Endpoint（授权端点）</h2>
+
+<p>授权端点是权限服务器和资源拥有者交互以便获得授权信息的端点。权限服务器必须验证资源拥有者的身份，通过何种方式（用户名、密码，会话cookie）验证超出该协议范围。</p>
+
+<p>Client通过何种方式获取权限服务器授权端点的路径超出了讨论范围，不过一般都会在权限服务器的文档中说明。</p>
+
+<p>端点的URI可能包含一个&#8221;application/x-www-form-urlencoded&#8221;格式的查询组件，当添加额外参数时必须保留这个组件。端点URI中不能包括不完整的查询组件。</p>
+
+<p>由于发往授权端点的请求将导致明文传输的授权凭证，权限服务器必须要求客户端建立TLS的请求。</p>
+
+<p>权限服务器必须支持Http Get方法，同样可以支持POST方法。</p>
+
+<p>不包含值得参数必须忽略对待，服务器必须忽略不认识的参数。请求和响应中的参数不得出现超过一次。</p>
+
+<h3>3.3.1 响应类型</h3>
+
+<p>授权端点是为授权码类型和简化类型的授权服务的，客户端使用以下参数知会服务器其期望的授权类型：</p>
+
+<p>response_type：必须。必须是<a href="http://tools.ietf.org/html/rfc6749#section-4.1.1">章节4.1.1</a>中描述的&#8221;code&#8221;、<a href="http://tools.ietf.org/html/rfc6749#section-4.2.1">章节4.2.1</a>描述的获取access token的“token”或者<a href="http://tools.ietf.org/html/rfc6749#section-8.4">章节8.4</a>描述的已注册的扩展值之一。</p>
+
+<p>扩展响应类型可能保护一个空格(%x20)分隔的的类别，其中值是顺序无关的，这部分响应类型的意义定义在其对应的协议中。</p>
+
+<p>如果一个请求没有或者提供了不可识别的响应类型，权限服务器必须返回<a href="http://tools.ietf.org/html/rfc6749#section-4.1.2.1">4.1.2.1</a>中描述的错误。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Willard</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-02-22T22:27:20+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:27 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/oauth2/'>oauth2</a>, <a class='category' href='/blog/categories/others/'>others</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/18/oauth2-specification-client-registration/" title="Previous Post: oauth2 specification client registration">&laquo; oauth2 specification client registration</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/22/oauth2-specification-protocol-endpoints/">Oauth2 Specification Protocol Endpoints</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/18/oauth2-specification-client-registration/">Oauth2 Specification Client Registration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/15/basic-setup-of-octopress/">Create the First Post</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Willard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
