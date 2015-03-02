@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>OAuth2 Specification Introduction - It&#8217;s gangzz!</title>
+  <meta name="author" content="Willard">
+
+  
+  <meta name="description" content="OAuth 2.0 1.1 Role Resource Owner：资源的拥有者，当资源拥有者指人的时候一般是终端用户。
+Resource Server：资源不熟的服务器。负责响应合法Access_Token的资源请求。
+Client：请求资源的客户端，可以使其它应用的服务器、桌面应用、其它设备等 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gangzz.github.io/blog/2015/02/16/oauth2-specification-introduction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="It's gangzz!" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">It&#8217;s gangzz!</a></h1>
+  
+    <h2>A blogging about coding and life..</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gangzz.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/#">搜索</a></li>
+  <li><a href="/blog/categories/ruby">Ruby</a></li>
+  <li><a href="/blog/categories/others">其它技术</a></li>
+  <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="/about.html">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">OAuth2 Specification Introduction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-16T22:28:30+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:28 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>OAuth 2.0</h1>
+
+<hr />
+
+<h2>1.1 Role</h2>
+
+<ul>
+<li>Resource Owner：资源的拥有者，当资源拥有者指人的时候一般是终端用户。</li>
+<li>Resource Server：资源不熟的服务器。负责响应合法Access_Token的资源请求。</li>
+<li>Client：请求资源的客户端，可以使其它应用的服务器、桌面应用、其它设备等。</li>
+<li>Authorization Server：授权服务器。在【资源拥有者】授权后颁发给Client合法的Access_Token，并保存授权信息。</li>
+</ul>
+
+
+<h2>1.2 Protocol Flow</h2>
+
+<blockquote><pre><code>+--------+                               +---------------+
+ |        |--(A)- Authorization Request -&gt;|   Resource    |
+ |        |                               |     Owner     |
+ |        |&lt;-(B)-- Authorization Grant ---|               |
+ |        |                               +---------------+
+ |        |
+ |        |                               +---------------+
+ |        |--(C)-- Authorization Grant --&gt;| Authorization |
+ | Client |                               |     Server    |
+ |        |&lt;-(D)----- Access Token -------|               |
+ |        |                               +---------------+
+ |        |
+ |        |                               +---------------+
+ |        |--(E)----- Access Token ------&gt;|    Resource   |
+ |        |                               |     Server    |
+ |        |&lt;-(F)--- Protected Resource ---|               |
+ +--------+                               +---------------+
+</code></pre></blockquote>
+
+<p>Figure 1: Abstract Protocol Flow</p>
+
+<ol>
+<li>Client直接或者间接向Resource Owner索取资源的授权。</li>
+<li>Resource Owner返回授权信息给Client（grant code）。</li>
+<li>Client向Authorization Server发送包含授权信息的请求。</li>
+<li>Authorization Server颁发Access_Token给Client。</li>
+<li>Client使用Access_Token向Resource Server请求感兴趣的资源。</li>
+<li>Resource Server验证Access_Token的有效性（向Authorization Server）后，响应Client请求。</li>
+</ol>
+
+
+<h2>1.3 Authorization Grant</h2>
+
+<p>认证授权是一张代表了资源拥有者授权的证书，Client用它获取Access_Token。OAuth2提供了四种授权类型：authorization code， implicit， resource owner password credentials(UserName, Password)，client credential——第四种提供客户端的可扩展性。</p>
+
+<h3>1.3.1 Authorization Code</h3>
+
+<p>通过介于Client和Resource Owner之间的Authorization Server获取授权码。与直接向Resource Owner索取授权不同，Client把Resource Owner导向授权服务器，在获取到授权后该服务器将Resource Owner和授权码导向Client。</p>
+
+<p>在把Resource Owner和授权码导向Client之前，Authorization Server对其鉴权并获得授权。由于Resource Owner只需要和Authorization Server打交道，Resource Owner的证书不需要和Client共享的。</p>
+
+<p>授权码的机制提供了几个安全方面重要的好处，比如鉴定Client、直接把Access_Token传递给Client，而不需要经过Resource Owner——那将存在暴露给第三方的潜在风险。</p>
+
+<h3>1.3.2 Implicit（简化）</h3>
+
+<p>Implicit流程是Authorization Code的简化版本，主要用于浏览器中脚本实现。在Implicit流程中不是颁发授权码（Authorization Code）而是直接传递Access_Token给Client。这个授权过程是暗含的，这其中没有中间证书的发布（如Authorization Code）。</p>
+
+<p>在传递Access_Token给Client的过程中，Authorization Server是不对Client鉴定的。有些情况下，可能通过Redirect Url鉴定Client，但是在发布过程中Access_Token可能会被Resource Owner和任何有权获得Client User-Agent的设备截获。</p>
+
+<p>暗含授权机制提升了一些客户端（如浏览器内App）的响应性和效率，因为它降低了获得Access_Token过程中的交互旅程。然而，必须权衡该便利性带来的安全方面的损失，特别是在Authorization Code方式可选的时候，这部分将在<a href="http://tools.ietf.org/html/rfc6749#section-10.3">10.3</a>和<a href="http://tools.ietf.org/html/rfc6749#section-10.16">10.6</a>节讲述。</p>
+
+<h3>1.3.3 Resource Owner Password Credentials</h3>
+
+<p>Resource Owner的密码证书（如用户名+密码）可以作为直接获得Access_Token的授权方式。这种授权方式应该只在Resource Owner和Client存在充分信任的情况下使用，而且是其它授权机制无法使用时（比如Client是客户设备操作系统的一部分或者高优先级的程序）。</p>
+
+<p>虽然这种认证方式要求Client能够直接访问Resource Owner的密码证书，但是还是要求在单独的请求中传递Resource Owner的证书来换取密码。该机制应避免在Client中记录Resource Owner的密码，可以通过使用长期的Access_Token或者Refresh_Token方式代替。</p>
+
+<h3>1.3.4 Client Credentials</h3>
+
+<p>当被请求资源是Client自己控制的或者被请求资源是预先与Authorization Server商定好的场景下，可以采用客户端（Client)认证。Client Credential被用作鉴权方案，通常是Client就是Resource Owner自身或者是被请求资源的授权已经预先在Authorization Server设定好的。</p>
+
+<h2>1.4 Access Token</h2>
+
+<p>Access Token是用来获取被保护资源的凭证。一个Access Token是一段代表了向client授权的字符串。该字符串对Client通常非透明的。它规定了授权的区间和范围，由Resource Owner授权，由Authorization Server和Resource Server执行。</p>
+
+<p>Access Token可能是用于检索权限信息的Id，也可能是符合某种校验规格的包含权限信息的数据（比如包含数据和签名）。客户端（Client）在使用Access Token时可能还要引入额外的鉴权机制——这超出了该规格的讨论范围。</p>
+
+<p>Access Token提供了一个授权的抽象层，使用可被Resource Server理解的单一token替代了其它不同的验证机制。在这个抽象中发布证书的动作比授权证书的动作更严格，同时免去了Resource Server要了解一大堆授权方法的痛苦。</p>
+
+<p>基于Resource Server对安全性的要求，Access tokens可以存在不同的格式、构造和可用方法。Access Token的属性和方法超出了本规格的范围，在一些同伴规格比如<a href="http://tools.ietf.org/html/rfc6750">[RFC6750]</a>中有其相关的定义。</p>
+
+<h2>1.5 Refresh Token</h2>
+
+<p>Refresh Token是一种用于获取Access Token的凭证。Refresh Token由Authorization Server发布，用于获取新的Access Token（当原有变为非法或失效后），或者用于获得具备同样或者更窄范围的额外Access Token（一个生命周期更短，或者范围比Resource Owner授权的更窄的Access Token）。是否发布Refersh Token是Authorization Server自主决定的。Refresh Token的发布是包含在Access Token的发布中的。</p>
+
+<p>Refresh Token是代表了Resource Owner授权的字符串，通常对Client是非透明的。这个字符串代表了获取授权信息的Id。与Access Token不同 Refresh Token只用于和Authorization Server交互，不会用于Resource Server。</p>
+
+<pre><code>  +--------+                                           +---------------+
+  |        |--(A)------- Authorization Grant ---------&gt;|               |
+  |        |                                           |               |
+  |        |&lt;-(B)----------- Access Token -------------|               |
+  |        |               &amp; Refresh Token             |               |
+  |        |                                           |               |
+  |        |                            +----------+   |               |
+  |        |--(C)---- Access Token ----&gt;|          |   |               |
+  |        |                            |          |   |               |
+  |        |&lt;-(D)- Protected Resource --| Resource |   | Authorization |
+  | Client |                            |  Server  |   |     Server    |
+  |        |--(E)---- Access Token ----&gt;|          |   |               |
+  |        |                            |          |   |               |
+  |        |&lt;-(F)- Invalid Token Error -|          |   |               |
+  |        |                            +----------+   |               |
+  |        |                                           |               |
+  |        |--(G)----------- Refresh Token -----------&gt;|               |
+  |        |                                           |               |
+  |        |&lt;-(H)----------- Access Token -------------|               |
+  +--------+           &amp; Optional Refresh Token        +---------------+
+
+           Figure 2: Refreshing an Expired Access Token
+</code></pre>
+
+<p>图标2中展示的流程：</p>
+
+<ol>
+<li>客户端向权限服务器发送授权信息和鉴定请求，请求一个Access Token。</li>
+<li>权限服务器鉴定客户端并验证授权信息的合法性，如果合法发布一个Access Token和一个Refresh Token。</li>
+<li>客户端提交对受保护资源的请求和Access Token。</li>
+<li>资源服务器鉴定Access Token合法性，如合法响应请求。</li>
+<li>步骤（3）和步骤（4）不断进行，直到Access Token失效。如果客户端发觉Access Token失效它会跳转到步骤（7），否则继续（3）。</li>
+<li>因为Access Token已经失效，资源服务器返回token失效错误。</li>
+<li>客户端传递鉴定请求和Refresh Token给权限服务器，获取新的Access Token。客户端的授权需求基于客户端类型和权限服务器的策略。</li>
+<li>权限服务器鉴权Client并验证Refresh Token，如果合法，发布新的Access Token（有可能包括新的Refresh Token）。</li>
+</ol>
+
+
+<p>步骤3，4,5,6超出了本规格范围。</p>
+
+<h2>1.6 TLS Version</h2>
+
+<p>TLS(Transport Layer Security)。无论该协议选择哪个TLS，随着广泛部署和安全弱点的暴露，都有会心的TLS出现。到目前为止TLS 1.2是最新的版本，但是它还存在较多部署限制并且可能还不适合实现。TLS 1.0<a href="http://tools.ietf.org/html/rfc2246">RFC2246</a>是目前最广泛部署的版本，并且提供了良好的协同性。</p>
+
+<p>不同的实现可能还选择了额外的TLS机制满足他们的安全需要。</p>
+
+<h2>1.7 HTTP Redirections</h2>
+
+<p>在协议中扩展使用了Http重定向，客户端或者权限服务器使用这种方式彼此传递Resource Owner的user-agent。在当前协议中使用了Http的302状态码的方式，其它经由user-agent的方式也是被允许的并且可以视为一种具体实现。</p>
+
+<h2>1.8 Interoperability(互操作性)</h2>
+
+<p>OAuth 2.0提供了一个丰富的框架和良好定义的安全特性。然而，作为一个包含众多可选组件的丰富且高可扩展的框架，就自身而言，这份协议倾向于产生一个广泛的不可互操作的实现。</p>
+
+<p>除此以外，协议中有少量的必要组件是部分实现或未实现（如客户端注册、权限服务器扩展性、终端发现）。缺失了这些组件，客户端只能人工并且针对权限服务器和资源服务器配置才能实现互操作性。</p>
+
+<p>协议的定义存在一个明确的期待——将来的工作会定义规范的资料和必要的扩展，以实现全面的网络层互操作性。</p>
+
+<h2>1.9 Notational Conventions(标记约定)</h2>
+
+<p>关键字&#8221;MUST&#8221;, &ldquo;MUST NOT&rdquo;, &ldquo;REQUIRED&rdquo;, &ldquo;SHALL&rdquo;, &ldquo;SHALL NOT&rdquo;, &ldquo;SHOULD&rdquo;, &ldquo;SHOULD NOT&rdquo;, &ldquo;RECOMMENDED&rdquo;, &ldquo;MAY&rdquo;, and &ldquo;OPTIONAL&#8221;的示意在<a href="http://tools.ietf.org/html/rfc2119">RFC2119</a>中定义.</p>
+
+<p>本协议使用Augmented Backus-Naur Form (ABNF)<a href="http://tools.ietf.org/html/rfc5234">RFC5234</a>标记。此外, 从&#8221;Uniform Resource Identifier (URI): Generic Syntax“ <a href="http://tools.ietf.org/html/rfc3986">RFC3986</a>引入了URI-reference的规定。</p>
+
+<p>某些安全相关的短语采用<a href="http://tools.ietf.org/html/rfc4949">RFC4949</a>中的场景理解.这些短语包括但不限于：&#8221;attack&#8221;, &ldquo;authentication&rdquo;, &ldquo;authorization&rdquo;, &ldquo;certificate&rdquo;,&ldquo;confidentiality&rdquo;, &ldquo;credential&rdquo;, &ldquo;encryption&rdquo;, &ldquo;identity&rdquo;, &ldquo;sign&rdquo;,&ldquo;signature&rdquo;, &ldquo;trust&rdquo;, &ldquo;validate&rdquo;, and &ldquo;verify&rdquo;.</p>
+
+<p>除非特殊说明，左右协议的参数名和值都是大小写敏感的。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Willard</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-02-16T22:28:30+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:28 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/oauth2/'>oauth2</a>, <a class='category' href='/blog/categories/others/'>others</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/15/basic-setup-of-octopress/" title="Previous Post: Create The First Post">&laquo; Create The First Post</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/02/18/oauth2-specification-client-registration/" title="Next Post: oauth2 specification client registration">oauth2 specification client registration &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/02/threadpoolexecutoryuan-ma-fen-xi/">ThreadPoolExecutor源码分析</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/24/obtaining-authorization/">Obtaining Authorization</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/22/oauth2-specification-protocol-endpoints/">Oauth2 Specification Protocol Endpoints</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/18/oauth2-specification-client-registration/">Oauth2 Specification Client Registration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/16/oauth2-specification-introduction/">OAuth2 Specification Introduction</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Willard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
