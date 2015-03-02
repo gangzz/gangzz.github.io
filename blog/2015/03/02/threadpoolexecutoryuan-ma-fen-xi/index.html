@@ -9,11 +9,11 @@
   <meta name="author" content="Willard">
 
   
-  <meta name="description" content="ThreadPoolExecutor源码分析 设置 keepAliveTime：空闲线程的存活时间
+  <meta name="description" content="设置 keepAliveTime：空闲线程的存活时间
 allowCoreThreadTimeout：允许核心线程超时
 maximumPoolSize：设置池的最大线程数
 corePoolSize：设置池的核心线程数
-rejectHandler： &hellip;">
+rejectHandler：设置添加任务拒绝的处理策略 行为 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,9 +92,7 @@ rejectHandler： &hellip;">
   </header>
 
 
-<div class="entry-content"><h1>ThreadPoolExecutor源码分析</h1>
-
-<h2>设置</h2>
+<div class="entry-content"><h2>设置</h2>
 
 <ul>
 <li>keepAliveTime：空闲线程的存活时间</li>
@@ -163,7 +161,7 @@ rejectHandler： &hellip;">
 
 <h3>工作流程</h3>
 
-<p><img src="../_images/hold.png" alt="ThreadPoolExecutor工作流程" /></p>
+<p><img src="/images/blog/hold.png" alt="ThreadPoolExecutor工作流程" /></p>
 
 <h3>状态&amp;状态变迁</h3>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[It's gangzz!]]></title>
   <link href="http://gangzz.github.io/atom.xml" rel="self"/>
   <link href="http://gangzz.github.io/"/>
-  <updated>2015-03-02T21:18:01+08:00</updated>
+  <updated>2015-03-02T21:24:42+08:00</updated>
   <id>http://gangzz.github.io/</id>
   <author>
     <name><![CDATA[Willard]]></name>
@@ -18,9 +18,7 @@
     <link href="http://gangzz.github.io/blog/2015/03/02/threadpoolexecutoryuan-ma-fen-xi/"/>
     <updated>2015-03-02T21:05:29+08:00</updated>
     <id>http://gangzz.github.io/blog/2015/03/02/threadpoolexecutoryuan-ma-fen-xi</id>
-    <content type="html"><![CDATA[<h1>ThreadPoolExecutor源码分析</h1>
-
-<h2>设置</h2>
+    <content type="html"><![CDATA[<h2>设置</h2>
 
 <ul>
 <li>keepAliveTime：空闲线程的存活时间</li>
@@ -89,7 +87,7 @@
 
 <h3>工作流程</h3>
 
-<p><img src="../_images/hold.png" alt="ThreadPoolExecutor工作流程" /></p>
+<p><img src="http://gangzz.github.io/images/blog/hold.png" alt="ThreadPoolExecutor工作流程" /></p>
 
 <h3>状态&amp;状态变迁</h3>
 
