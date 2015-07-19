@@ -3,7 +3,7 @@ layout: post
 title: "IK源码学习"
 date: 2015-03-10 23:27:12 +0800
 comments: true
-categories: ["搜索", "分词"]
+categories: ["search", "segment"]
 ---
 
 ## 名词说明
@@ -22,7 +22,7 @@ categories: ["搜索", "分词"]
 
 ### 总流程
 
-![IKAnalyzer总处理流程](../images/blog/20150310/IKAnalyzer.png)
+![IKAnalyzer总处理流程](/images/blog/20150310/IKAnalyzer.png)
 
 Ik分词流程分为两部分：
 
@@ -32,7 +32,7 @@ Ik分词流程分为两部分：
 
 ### 分词流程
 
-![分词流程图](../images/blog/20150310/IKAnalyzer_segment.png)
+![分词流程图](/images/blog/20150310/IKAnalyzer_segment.png)
 
 *注意：图中省略了对AnalyzeContext字符数组的再填充，实际流程于此稍有差别*
 
@@ -227,7 +227,7 @@ IKAnalyzer中使用多叉树储存词库，识别逻辑共涉及三个类：
 * Dictionary：词库。
 * DictSegment：多叉树节点的封装。包含当前字符、下一级节点、是否是完整词的status。
 
-![词库示意图](../images/blog/20150310/IKAnalyzer_dict.png)
+![词库示意图](/images/blog/20150310/IKAnalyzer_dict.png)
 
 上图展现了一个词库示意图。
 
@@ -282,7 +282,7 @@ QuickSortSet中词元存储顺序由Lexeme的compareTo方法决定：
 
 所以在QuickSortSet中，元素的排布情况包括以下几种。
 
-![](../images/blog/20150310/IKAnalyzer_quickSQ.png)
+![](/images/blog/20150310/IKAnalyzer_quickSQ.png)
 
 QuickSortSet的介绍暂时到此，在后面会继续涉及这部分。
 
@@ -470,10 +470,10 @@ judge()的代码分两部分看，第一部分while()循环之前。
 
 参考如下图片，IKAnalyzer并没有进行全量的排列组合，这种处理方式可以解决【蓝色】表示的冲突问题，但是在【红色】表示的情境下，IK会错过最优解。其作者说明的IK正确率是95%，这种查找最优解的方式也许是性能和正确率之间权衡的结果？
 
-![](../images/blog/20150310/IKAnalyzer_resolve.png)
+![](/images/blog/20150310/IKAnalyzer_resolve.png)
 
 
 
 ## 类图
 
-![](../images/blog/20150310/Main.png)
+![](/images/blog/20150310/Main.png)
