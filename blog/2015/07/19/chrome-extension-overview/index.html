@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Chrome Extension Overview - It&#8217;s gangzz!</title>
+  <meta name="author" content="Willard">
+
+  
+  <meta name="description" content="The basics 插件的本质是一组有html、css、js和图片组成的bundle。 插件可以通过content script和cross-orgin XMLHttpRequest和当前页面互动，并且可以调用浏览器赋予页面的特性：书签、页签等。 插件UI 插件UI分为browser &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gangzz.github.io/blog/2015/07/19/chrome-extension-overview/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="It's gangzz!" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">It&#8217;s gangzz!</a></h1>
+  
+    <h2>A blogging about coding and life..</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gangzz.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/#">搜索</a></li>
+  <li><a href="/blog/categories/ruby">Ruby</a></li>
+  <li><a href="/blog/categories/others">其它技术</a></li>
+  <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="/about.html">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Chrome Extension Overview</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-19T16:36:19+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>The basics</h2>
+
+<p>插件的本质是一组有html、css、js和图片组成的bundle。</p>
+
+<p>插件可以通过content script和cross-orgin XMLHttpRequest和当前页面互动，并且可以调用浏览器赋予页面的特性：书签、页签等。</p>
+
+<h3>插件UI</h3>
+
+<p>插件UI分为browser action和page action两种，browser action会时时出现而page action只在匹配到的页面时才出现。如果你的插件是对所有网站通用的就选择browser action，否则应该选择page action。</p>
+
+<p>除此以外插件还有其它途径展现自己的界面比如增加菜单项、提供一个配置页面、利用content script修改当前页面。</p>
+
+<h3>Files</h3>
+
+<p>插件包含的文件:</p>
+
+<ul>
+<li>manifest.json json格式的元数据文件。</li>
+<li>html文件。</li>
+<li>js文件（可选）。</li>
+<li>其它你可能用到的文件，比如图片。</li>
+</ul>
+
+
+<h4>文件引用</h4>
+
+<p>文件的访问：一般情况下一个扩展插件中的文件可以通过相对路径访问。你也可以使用chrome-extensions/extensionID/file的方式访问。</p>
+
+<p>在你的扩展插件打包并且上传到应用市场后，它将获得永久ID。其它情况下（开发）每当其更改目录或者重新打包都会导致变更，这时可以使用预置变量@@extension_id来解决。</p>
+
+<h3>manifest.json</h3>
+
+<p>manifest.json提供了扩展插件的重要信息以及它需要用到的能力。</p>
+
+<pre><code> {
+  "name": "My Extension",
+  "version": "2.1",
+  "description": "Gets information from Google.",
+  "icons": { "128": "icon_128.png" },
+  "background": {
+    "persistent": false,
+    "scripts": ["bg.js"]
+  },
+  "permissions": ["http://*.google.com/", "https://*.google.com/"],
+  "browser_action": {
+    "default_title": "",
+    "default_icon": "icon_19.png",
+    "default_popup": "popup.html"
+  }
+}
+</code></pre>
+
+<h2>架构</h2>
+
+<p>一个扩展插件有一个不可见的background页面，用于保存其逻辑。除此还可能存在其它html页面作为UI。如果一个页面要和用户加载的页面交互就必须使用content script。</p>
+
+<h3>The background page</h3>
+
+<p>无论browser action还是page action都有一个background page。background page分为 持久background page和事件 background page。除非你希望自己的插件要时刻允许，否则推荐使用事件background page。</p>
+
+<h3>UI Pages</h3>
+
+<p>每个扩展插件都可以有自己的常规HTML界面。比如popup.html用于点击插件是弹出，options.html作为配置页面。另一个类型的页面是override页面。</p>
+
+<p>一个扩展插件内部的页面是可以互相操作dom和调用函数的。因此同样的函数没有必要在插件中重复出现，它们都可以通过调用background page的函数完成。</p>
+
+<h3>Content Script</h3>
+
+<p>如果要和用户页面交互就必须使用content script。content script是在用户加载页面的作用域内执行的脚本。</p>
+
+<p>content script可以轻易的读取和修改用户页面的DOM，但是它不能修改其所在插件background page中的dom。</p>
+
+<p>content script与扩展插件并非完全隔离，它们之间可以通过消息通信。</p>
+
+<h2>Useing Chrome.* APIS</h2>
+
+<p>扩展插件还可以调用浏览器专有方法，实现和浏览器的紧密集成。比如如果想打开一个窗口你可以调用window.open()方法，但是如果想控制url应该展现在哪个窗口时，就要用到chrome的tabs.create方法。</p>
+
+<h3>ansynchronous vs synchronous</h3>
+
+<p>大部分Chrome.* API都是异步的，这意味着它们的调用会立即返回。如果希望关心方法调用的输出可以使用callback。异步方法会在执行后调用callback方法。</p>
+
+<pre><code>chrome.tabs.create(object createProperties, function callback)
+</code></pre>
+
+<p>其它同步的Chrome.* API则不具备callback参数，它们的调用会持续到结果返回。</p>
+
+<pre><code>string chrome.runtime.getURL()
+</code></pre>
+
+<h2>Communication between pages</h2>
+
+<p>同一个扩展插件中的页面是可以互相调用的，这是因为它们都在同一个进程的同一个线程范围内执行的。</p>
+
+<p>可使用chrome.extension查找同一个扩展插件中的页面，使用方法getViews()和getBackgroundPage()。一旦某个页面获得了另一个页面的引用，它就可以调用其函数，修改它的DOM。</p>
+
+<h2>Saving Data And Incognito Mode</h2>
+
+<p>扩展插件可以使用storage API、 HTML5 web storage API或者通过云端通信存储数据。当保持数据时应该先考虑是否是在隐身模式下，默认情况下插件不应该在隐身环境中执行。</p>
+
+<p>隐身模式保证浏览器不保留任何用户的踪迹，因此需要考虑隐身模式下用户会希望一款插件做什么、不做什么。比如记录浏览历史的动作不应该执行，但是插件配置如果在隐身模式下被修改也应该在之后起作用。</p>
+
+<p>可以通过chrome.tabs或是window的API判断当前是否是隐身模式。</p>
+
+<pre><code>function saveTabData(tab, data) {
+  if (tab.incognito) {
+    chrome.runtime.getBackgroundPage(function(bgPage) {
+      bgPage[tab.url] = data;      // Persist data ONLY in memory
+    });
+  } else {
+    localStorage[tab.url] = data;  // OK to store data
+  }
+}
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Willard</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-07-19T16:36:19+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:36 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chrome/'>chrome</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/05/26/svn-serverda-jian/" title="Previous Post: svn server搭建">&laquo; svn server搭建</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/07/19/event-page/" title="Next Post: Event Page">Event Page &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/15/flume-filechannel-yuan-ma/">Flume FileChannel 源码</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/19/content-scripts/">Content Scripts</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/19/event-page/">Event Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/19/chrome-extension-overview/">Chrome Extension Overview</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/26/svn-serverda-jian/">Svn Server搭建</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Willard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

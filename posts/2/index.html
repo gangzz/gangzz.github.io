@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>OAuth2 Specification Introduction - It&#8217;s gangzz!</title>
+  <title>It&#8217;s gangzz!</title>
   <meta name="author" content="Willard">
 
   
@@ -20,7 +20,7 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://gangzz.github.io/blog/2015/02/16/oauth2-specification-introduction/">
+  <link rel="canonical" href="http://gangzz.github.io/posts/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="It's gangzz!" type="application/atom+xml">
@@ -69,12 +69,15 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">OAuth2 Specification Introduction</h1>
+      <h1 class="entry-title"><a href="/blog/2015/02/16/oauth2-specification-introduction/">OAuth2 Specification Introduction</a></h1>
     
     
       <p class="meta">
@@ -90,7 +93,7 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
   </header>
 
 
-<div class="entry-content"><h1>OAuth 2.0</h1>
+  <div class="entry-content"><h1>OAuth 2.0</h1>
 
 <hr />
 
@@ -251,52 +254,106 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
 
 <p>除非特殊说明，左右协议的参数名和值都是大小写敏感的。</p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
+  
   
 
-<span class="byline author vcard">Posted by <span class="fn">Willard</span></span>
 
-      
-
-
-
-
-<time class='entry-date' datetime='2015-02-16T22:28:30+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:28 pm</span></time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/oauth2/'>oauth2</a>, <a class='category' href='/blog/categories/others/'>others</a>
   
-</span>
-
-
-    </p>
+    <article>
+      
+  <header>
     
-      <div class="sharing">
-  
-  
-  
-</div>
-
+      <h1 class="entry-title"><a href="/blog/2015/02/15/basic-setup-of-octopress/">Create the First Post</a></h1>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/02/15/basic-setup-of-octopress/" title="Previous Post: Create The First Post">&laquo; Create The First Post</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2015/02/18/oauth2-specification-client-registration/" title="Next Post: oauth2 specification client registration">oauth2 specification client registration &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
+    
+      <p class="meta">
+        
 
+
+
+
+<time class='entry-date' datetime='2015-02-15T23:25:06+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:25 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>安装</h1>
+
+<h2>前置依赖</h2>
+
+<ol>
+<li>git</li>
+<li>Ruby 1.9.3及以上版本，可以通过rbenv或RVM搞定。</li>
+<li>安装<a href="https://github.com/sstephenson/execjs">ExecJS</a>中支持的任意JavaScript运行时环境。</li>
+</ol>
+
+
+<h2>设置Octopress</h2>
+
+<p>源文件下载</p>
+
+<pre><code>git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+</code></pre>
+
+<p>解决依赖关系</p>
+
+<pre><code>gem install bundler
+rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+bundle install
+</code></pre>
+
+<p>安装默认主题的Octopress</p>
+
+<pre><code>rake install
+</code></pre>
+
+<h2>设置部署</h2>
+
+<p>这里选择的Github Pages，从略。</p>
+
+<h1>创建Blog</h1>
+
+<p>使用命令创建一篇Blog，blog文件位于source/_posts/目录下：</p>
+
+<pre><code>rake new_post[your blog name]
+</code></pre>
+
+<p>使用任意编辑器编辑blog，完成保存执行命令：</p>
+
+<pre><code>rake generate
+</code></pre>
+
+<h1>本地测试</h1>
+
+<p>使用命令启动本地服务器，端口4000.</p>
+
+<pre><code>rake preview
+</code></pre>
+
+<h1>部署</h1>
+
+<pre><code>rake deploy
+</code></pre>
 </div>
+  
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/index.html">Newer &rarr;</a>
+    
+  </div>
+</div>
 <aside class="sidebar">
   
     <section>
@@ -332,7 +389,6 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
 
   
 </aside>
-
 
     </div>
   </div>
