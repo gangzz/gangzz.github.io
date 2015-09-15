@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Flume | It's gangzz!]]></title>
   <link href="http://gangzz.github.io/blog/categories/flume/atom.xml" rel="self"/>
   <link href="http://gangzz.github.io/"/>
-  <updated>2015-09-15T23:52:31+08:00</updated>
+  <updated>2015-09-16T00:00:30+08:00</updated>
   <id>http://gangzz.github.io/</id>
   <author>
     <name><![CDATA[Willard]]></name>
@@ -18,7 +18,7 @@
     <link href="http://gangzz.github.io/blog/2015/09/15/flume-filechannel-yuan-ma/"/>
     <updated>2015-09-15T23:14:58+08:00</updated>
     <id>http://gangzz.github.io/blog/2015/09/15/flume-filechannel-yuan-ma</id>
-    <content type="html"><![CDATA[<p><img src="resources/201509/UserGuide_image00.png" alt="Flume结构" /></p>
+    <content type="html"><![CDATA[<p><img src="/images/blog/20150915/UserGuide_image00.png" alt="Flume结构" /></p>
 
 <p>FileChannel是Flume Channel的一种基于文件系统的实现，能够直接持久化消息（FlumeEvent）到文件系统中。</p>
 
@@ -40,7 +40,7 @@
 
 <p>以下将从效率、可靠性、事务、更新策略上介绍FileChannel设计及其文件系统的利用。</p>
 
-<p><img src="resources/201509/fs_structure.png" alt="文件数据组织结构" /></p>
+<p><img src="/images/blog/20150915/fs_structure.png" alt="文件数据组织结构" /></p>
 
 <h3>data Dirs</h3>
 
@@ -84,7 +84,7 @@
 
 <h2>类图结构</h2>
 
-<p><img src="resources/201509/FileChannelClasses.png" alt="FileChannel类图" /></p>
+<p><img src="/images/blog/20150915/FileChannelClasses.png" alt="FileChannel类图" /></p>
 
 <ul>
 <li>Channel 接口封装。</li>
