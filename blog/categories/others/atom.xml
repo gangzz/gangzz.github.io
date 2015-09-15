@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Others | It's gangzz!]]></title>
+  <link href="http://gangzz.github.io/blog/categories/others/atom.xml" rel="self"/>
+  <link href="http://gangzz.github.io/"/>
+  <updated>2015-05-26T21:03:21+08:00</updated>
+  <id>http://gangzz.github.io/</id>
+  <author>
+    <name><![CDATA[Willard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Svn Server搭建]]></title>
+    <link href="http://gangzz.github.io/blog/2015/05/26/svn-serverda-jian/"/>
+    <updated>2015-05-26T20:33:04+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/05/26/svn-serverda-jian</id>
+    <content type="html"><![CDATA[<p>参考:<a href="https://www.rosehosting.com/blog/install-and-configure-svn-webdav-server-on-a-centos-6-vps/">https://www.rosehosting.com/blog/install-and-configure-svn-webdav-server-on-a-centos-6-vps/</a></p>
+
+<h1>介绍</h1>
+
+<p>本文目标为实现http方式远程svn repository访问，实现借助于apache、webDAV、subversion，操作环境为centos。</p>
+
+<h1>安装subversion</h1>
+
+<p>使用管理员账号执行。</p>
+
+<pre><code>yum install subversion
+</code></pre>
+
+<p>完成后创建svn repository，由于使用了apache，选择执行以下命令：</p>
+
+<pre><code>svnadmin create /var/www/svn/repo
+</code></pre>
+
+<h1>安装webdav</h1>
+
+<p>webdav（Web Distributed Authoring and Versioning ）是超文本协议的一个扩展，允许远程客户端执行web内容鉴权。DAV提供了一系列文件系统操作命令，各平台存在多种webDav的实现，其中包括svn。</p>
+
+<p>执行以下命令安装</p>
+
+<pre><code>yum install mod_dav_svn
+</code></pre>
+
+<h1>配置Apache</h1>
+
+<p>完成后在/etc/httpd/conf.d中新建针对svn的配置subversion.conf，这么做是因为httpd默认的配置/etc/httpd/conf/httpd.conf中包含inclue conf.d/*.conf的引用。</p>
+
+<p>subversion的核心内容</p>
+
+<blockquote><p>LoadModule dav_svn_module     modules/mod_dav_svn.so</p>
+
+<p>LoadModule authz_svn_module   modules/mod_authz_svn.so</p>
+
+<p>\<Location /repos\></p>
+
+<p>DAV svn</p>
+
+<p>SVNParentPath /var/www/svn</p>
+
+<p>AuthType Basic</p>
+
+<p>AuthName &ldquo;some Realm&rdquo;</p>
+
+<p>AuthUserFile /etc/svn_htpasswd</p>
+
+<p>AuthzSVNAccessFile /etc/svn_acl</p>
+
+<p>Require valid-user</p>
+
+<p>\&lt;/Location></p></blockquote>
+
+<p> <strong>LoadModule</strong> 加载了webdav需要的模块。</p>
+
+<p> <strong>\&lt;Location></strong>的使用定义了apache路径的闭包，在apache中包括\&lt;Directory>、\&lt;File>、\&lt;Location>三种命令用于定义url path的闭包，前两者用于映射文件系统，而Location用于非文件系统位置的映射。</p>
+
+<p> 其中AuthUserFile、AuthzSVNAccessFile分别定义了全局的用户账号、SVN ACL配置文件的位置。</p>
+
+<h1>配置PASSWD</h1>
+
+<p>使用以下命令修改svn_htpasswd文件内容。</p>
+
+<pre><code>#创建文件并加入user
+htpasswd -cm /etc/svn_htpasswd user1
+#新增user
+htpasswd -m /etc/svn_htpasswd user2
+</code></pre>
+
+<h1>配置ACL</h1>
+
+<p>acl是Access Control List的缩写，提供了用户和分组范围的访问控制配置，配置可以复制/var/www/svn/repo/conf/auth文件，如果没有指定全局的ACL，svn就会使用每个仓库下conf/auth的配置。</p>
+
+<p>ACL文件配置如下：</p>
+
+<pre><code>[groups]
+dev_group = user1,user2
+
+[/]
+@dev_group = rw
+
+[repository:/repo]
+@dev_group = rw
+</code></pre>
+
+<p>至此完成，启动或重启apache httpd即可:</p>
+
+<pre><code>service httpd start/restart
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ThreadPoolExecutor源码分析]]></title>
+    <link href="http://gangzz.github.io/blog/2015/03/02/threadpoolexecutoryuan-ma-fen-xi/"/>
+    <updated>2015-03-02T21:05:29+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/03/02/threadpoolexecutoryuan-ma-fen-xi</id>
+    <content type="html"><![CDATA[<h2>设置</h2>
+
+<ul>
+<li>keepAliveTime：空闲线程的存活时间</li>
+<li>allowCoreThreadTimeout：允许核心线程超时</li>
+<li>maximumPoolSize：设置池的最大线程数</li>
+<li>corePoolSize：设置池的核心线程数</li>
+<li>rejectHandler：设置添加任务拒绝的处理策略</li>
+</ul>
+
+
+<h2>行为</h2>
+
+<h3>keepAliveTime &amp; allowCoreThreadTimeout：</h3>
+
+<p>设线程数为N，当（核心线程数 &lt; N &lt; 最大线程数）时，线程空闲超过设置的时间将会被关闭。如果设置allowCoreThreadTimeout，那么当(N > 0)时即存在上述行为。</p>
+
+<h3>maximumPoolSize &amp; corePoolSize</h3>
+
+<ol>
+<li>当（N &lt; corePoolSize）时新添加任务会创建一个线程。</li>
+<li>当（N >= corePoolSize)时新添加的任务会入队：
+
+<ol>
+<li>如果入队成功，还会检查线程池至少有一个线程是活动的（没有会尝试创建）。</li>
+<li>如果入队失败，尝试创建一个线程，如果线程已达上限（或其他原因）不可创建，则拒绝当前任务。</li>
+</ol>
+</li>
+<li>如果当前Executor已经Shutdown或停止，拒绝当前任务。</li>
+</ol>
+
+
+<h3>prestartCoreThread、ensurePrestart、prestartAllThread</h3>
+
+<ul>
+<li>prestartCoreThread：不管有没有添加任务，确保线程池中有coreSize数量个线程。</li>
+<li>ensurePrestart：和prestartCoreThread行为一致，唯一不同是即使coreSize设置为0也会启动一个空闲线程。</li>
+<li>prestartAllThread：启动能启动的最大数量个线程。
+
+<h3>rejectHandler</h3></li>
+</ul>
+
+
+<p>ThreadPoolExecutor默认提供了四种处理任务被拒绝的策略：</p>
+
+<ul>
+<li>AbortPolicy：拒绝，抛出异常，也是默认的处理策略。</li>
+<li>DiscardPolicy：放弃当前。不抛出异常，放弃当前任务。</li>
+<li>DiscardOldestPolicy：放弃最旧任务。不抛出异常，从任务队列中移除位于队首的任务。</li>
+<li>CallerRunsPolicy：执行。在调用execute（submit）方法的当前线程执行该任务，该策略意在拉长提交任务的占用时间，从而降低提交频率。</li>
+</ul>
+
+
+<h3>exception</h3>
+
+<p>被执行的Runnable或Callable在执行期间抛出异常，将导致当前线程中断，并将创建新的Thread弥补空缺（不管是不是超过了coreSize）。</p>
+
+<h3>purge</h3>
+
+<p>线程池将遍历队列中所有的Task，清理已取消的任务。如果此时Executor已经Shutdown，此操作会尝试结束Executor。</p>
+
+<h3>statistic</h3>
+
+<p>线程池会统计完成的任务总数和最大线程数。</p>
+
+<h2>源码分析</h2>
+
+<h3>工作流程</h3>
+
+<p><img src="/images/blog/hold.png" alt="ThreadPoolExecutor工作流程" /></p>
+
+<h3>状态&amp;状态变迁</h3>
+
+<h4>状态说明</h4>
+
+<p>ThreadPoolExecutor运行状态包括：</p>
+
+<ul>
+<li>Running：Executor启动后的状态，接受并处理任务。</li>
+<li>Shutdown：调用shutdown方法后，不接受新的任务，但是继续处理队列中的任务。</li>
+<li>Stop：不接受不处理队列中的任务，并且中断正在处理的任务。</li>
+<li>Tidying：所有任务已结束、WorkCount（线程数）归零时处于Tidying状态，开始调用terminated()的钩子。</li>
+<li>Terminated：terminated()调用结束。</li>
+</ul>
+
+
+<h4>状态变迁：</h4>
+
+<ul>
+<li>Running -> Shutdown：调用了shutdown()。</li>
+<li>(Running or Shtudown) -> Stop：调用了shutdownNow()。</li>
+<li>Shutdown -> Tidying：队列和线程池已经空。</li>
+<li>Stop -> Tidying：线程池已经空。</li>
+<li>Tidying -> Terminated：terminated()方法已经调用。</li>
+</ul>
+
+
+<h4>ThreadPoolExecutor对状态和WorkCount的封装：</h4>
+
+<p>ThreadPoolExecutor使用一个AtomicInteger封装线程池状态和线程数</p>
+
+<pre><code>    //ctl为状态和WorkCount的封装
+    private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
+    private static final int COUNT_BITS = Integer.SIZE - 3;
+    private static final int CAPACITY   = (1 &lt;&lt; COUNT_BITS) - 1;
+
+    //编码ctl——状态和WorkCount按位与
+    private static int ctlOf(int rs, int wc) { return rs | wc; }
+</code></pre>
+
+<p>按Integer.SIZE = 32计算，一个线程池低位(29位)是线程值可以容纳的Worker的最大数量，高位（30~32）用于表示状态——因为有5个状态必须要三位表示。</p>
+
+<p>状态读取：</p>
+
+<pre><code>private static int runStateOf(int c)     { return c &amp; ~CAPACITY; }
+private static int workerCountOf(int c)  { return c &amp; CAPACITY; }
+</code></pre>
+
+<p>WorkCount的操作（增删）：</p>
+
+<pre><code>private boolean compareAndIncrementWorkerCount(int expect) {
+    return ctl.compareAndSet(expect, expect + 1);
+}
+
+private boolean compareAndDecrementWorkerCount(int expect) {
+    return ctl.compareAndSet(expect, expect - 1);
+}
+
+private void decrementWorkerCount() {
+    do {} while (! compareAndDecrementWorkerCount(ctl.get()));
+}
+</code></pre>
+
+<p>对状态和WorkerCount的操作都是使用Compare-And-Set的方式，无锁。</p>
+
+<h3>interruptIdleThread</h3>
+
+<p>ThreadPoolExecutor有几个中断空闲的线程的动机：</p>
+
+<ul>
+<li>重新设置池大小的时候——CoreSize、MaximumSize。</li>
+<li>重新设置空闲线程存活时间的时候——KeepAliveTime、AllowCoreThreadTimeout。</li>
+<li>调用shutdown的时候。</li>
+</ul>
+
+
+<p>中断空闲线程需要两个动作：识别空闲线程、移除空闲线程（从队列中<Workers>），其中WorkerQueue的实现是HashSet，非线程安全的。这里有两个锁的实现：</p>
+
+<p><strong>不可重进的排它锁——Worker类继承AbstractQueuedSynchronizer实现</strong></p>
+
+<ol>
+<li>用于空闲线程识别，线程允许获得的Task前会获得自己的锁，中断线程根据能够获得锁来识别线程是否空闲。</li>
+<li><p>为什么是不可重进的？为了避免线程本身修改线程池Size时导致重获得自己的锁。</p>
+
+<pre><code> private void interruptIdleWorkers(boolean onlyOne) {
+     final ReentrantLock mainLock = this.mainLock;
+     mainLock.lock();
+     try {
+         for (Worker w : workers) {
+             Thread t = w.thread;
+             //tryLock失败视为线程在忙碌
+             if (!t.isInterrupted() &amp;&amp; w.tryLock()) {
+                 try {
+                     t.interrupt();
+                 } catch (SecurityException ignore) {
+                 } finally {
+                     w.unlock();
+                 }
+             }
+             if (onlyOne)
+                 break;
+         }
+     } finally {
+         mainLock.unlock();
+     }
+ }
+</code></pre></li>
+</ol>
+
+
+<p><strong>可重进排它锁：mainlock</strong></p>
+
+<ol>
+<li>mainlock用于保证WorkerQueue的线程安全，需要获得该锁的操作包括：修改Workers、更新LargestPoolSize、更新CompletedTaskCount。</li>
+<li>为什么LargestPoolSize和CompleteTaskCount不使用Atomic*？没有必要，更新这两个值的动机都是要对workers操作。
+
+<ol>
+<li>largestPoolSize：添加worker时触发。</li>
+<li><p>CompletedTaskCount：每个worker会统计自己的CompleteTasks，在移除该worker时Executor会累加其值。</p>
+
+<pre><code> private final HashSet&lt;Worker&gt; workers = new HashSet&lt;Worker&gt;();
+
+ private final Condition termination = mainLock.newCondition();
+
+ private int largestPoolSize;
+
+ private long completedTaskCount;
+</code></pre></li>
+</ol>
+</li>
+</ol>
+
+
+<h3>性能CAS &amp; Lock</h3>
+
+<p>Executor尽可能追求使用CAS，只有必要的地方才会使用lock。</p>
+
+<p>使用CAS的地方：</p>
+
+<ul>
+<li>poolSize计数</li>
+<li>Executor的状态变迁</li>
+</ul>
+
+
+<p>使用lock的地方：</p>
+
+<ul>
+<li>workers的操作（包括LargestPoolSize、CompletedTaskCount）。</li>
+<li>获取LargestPoolSize值的操作。</li>
+</ul>
+
+
+<h3>When to terminate</h3>
+
+<p>大前提是Executor被调用了shutdown方法，但是从行为中得知shutdown方法不会立即终止Executor，而是要经历几个过程：Queue中task消费完、Pool为空。</p>
+
+<p>tryTerminate方法的目的在于确保条件到达后，Executor可以及时退出，因此在会触发条件的位置都调用了tryTerminate方法：</p>
+
+<ul>
+<li>shutdown、shutdownNow方法被调用</li>
+<li>queue的清理：purge、remove</li>
+<li>woker的清理：processWorkerExist、addWorkerFailed</li>
+</ul>
+
+
+<h3>When to interrupt idel thread</h3>
+
+<p>interruptIdelThread意在清理空闲的可被关闭的线程，在可能引起线程清理的位置对其调用：</p>
+
+<ul>
+<li>shutdown被调用</li>
+<li>设置CorePoolSize</li>
+<li>设置MaximumPoolSize</li>
+<li>设置KeepAliveTime</li>
+<li>AllowCoreThreadTimeout</li>
+<li>tryTerminate调用的同时</li>
+</ul>
+
+
+<h3>Why is worker queue not concurrent collection</h3>
+
+<p>Executor中使用mainlock和HashSet来存储线程池内的worker，而不是使用Concurrent Collection。这样做可以强制对worker的操作是顺序进行的，避免造成中断风暴（interrupt storm），特别是在shutdown的时候。同时简化了largestThreadSize统计实现，因为线程的退出和加入也是顺序化进行的。</p>
+
+<h3>keyword &ldquo;volatile&rdquo; useage in Executor</h3>
+
+<p>Executor中所有用户控制的参数都使用了“volatile”关键字，作者的注释是说处于执行的动作能够实时读到最新的数据，同时没有使用锁的必要——内部机制不需要立即对变化做出响应。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Obtaining Authorization]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/24/obtaining-authorization/"/>
+    <updated>2015-02-24T10:54:55+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/24/obtaining-authorization</id>
+    <content type="html"><![CDATA[<h1>Obtaining Authorization（获取授权）</h1>
+
+<p>客户端通过向资源拥有者申请授权的方式获得Access Token。OAuth提供四种授权方式：授权码、简化授权、资源拥有者密码凭证、客户端凭证，并提供了扩展其它凭证的机制。</p>
+
+<h2>4.1 Authorization Code Grant（授权码授权）</h2>
+
+<p>授权码授权可以用于access token、refersh token的获取，并且非常适合机密客户端。因为这是一个重定向流程，客户都必须支持与资源拥有者的浏览器交互，并可以响应来自权限服务器的重定向请求。</p>
+
+<pre><code> +----------+
+ | Resource |
+ |   Owner  |
+ |          |
+ +----------+
+      ^
+      |
+     (B)
+ +----|-----+          Client Identifier      +---------------+
+ |         -+----(A)-- &amp; Redirection URI ----&gt;|               |
+ |  User-   |                                 | Authorization |
+ |  Agent  -+----(B)-- User authenticates ---&gt;|     Server    |
+ |          |                                 |               |
+ |         -+----(C)-- Authorization Code ---&lt;|               |
+ +-|----|---+                                 +---------------+
+   |    |                                         ^      v
+  (A)  (C)                                        |      |
+   |    |                                         |      |
+   ^    v                                         |      |
+ +---------+                                      |      |
+ |         |&gt;---(D)-- Authorization Code ---------'      |
+ |  Client |          &amp; Redirection URI                  |
+ |         |                                             |
+ |         |&lt;---(E)----- Access Token -------------------'
+ +---------+       (w/ Optional Refresh Token)
+
+                注意：步骤A、B、C通过浏览器时分成两部分。
+
+                 Figure 3: Authorization Code Flow
+</code></pre>
+
+<p>  图示3中包含以下步骤：</p>
+
+<ol>
+<li>客户端引导资源拥有者的浏览器到授权端口来初始化流程，客户端包括客户端Id、请求的范围、本地状态、用于重定向的URI。</li>
+<li>权限服务器校验资源拥有者的身份，然后执行授权或者拒绝授权。</li>
+<li>假设资源拥有者予以授权，权限服务器重定向浏览器到URI，该URI种包括之前提供了方位和本地状态。</li>
+<li>客户单使用上一步骤中得到的授权码从服务器索取Access Token。发起请求时，客户端向权限服务器鉴权。客户端发送包含其重定向URI、授权码用于验证。</li>
+<li>权限服务器鉴权客户端，校验授权码，确认重定向URI与注册时的匹配。如果验证通过，权限服务器发布Access Token，可选的发布刷新Token。</li>
+</ol>
+
+
+<p>  ### 4.1.1 Authorization Request（授权请求）
+  客户端添加以下参数到查询部分到授权端点的URI（&#8221;application/x-www-form-urlencoded&#8221;格式）来构造授权请求：</p>
+
+<ul>
+<li> response_type：必须。值必须设置为“code”。</li>
+<li> client_id：必须。客户端的身份Id。</li>
+<li> redirect_uri：可选。</li>
+<li> scope：可选。申请访问的范围。</li>
+<li> state：建议使用。一个非透明的值用于客户端维护请求和回调时的状态。权限服务器在重定向回客户端时保留该值。该参数应该使用以避免跨站欺骗。</li>
+</ul>
+
+
+<p>  客户端通过重定向响应或其他手段引导资源拥有者到期构造的URI。</p>
+
+<p>  举例，客户端引导浏览器发起TLS请求：</p>
+
+<pre><code>GET /authorize?response_type=code&amp;client_id=s6BhdRkqt3&amp;state=xyz&amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+</code></pre>
+
+<p>  权限服务器校验请求确保所有参数已提供并合法。如果合法权限服务器鉴权资源拥有者，并获取授权结果。</p>
+
+<p>  一旦授权结论确定，权限服务器使用重定向或其它方式返回响应给client。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Oauth2 Specification Protocol Endpoints]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints/"/>
+    <updated>2015-02-22T22:27:20+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/22/oauth2-specification-protocol-endpoints</id>
+    <content type="html"><![CDATA[<h1>3 Protocol Endpoints（协议端点）</h1>
+
+<p>在授权过程中使用到了两个端点：</p>
+
+<ul>
+<li>授权端点：客户端通过资源拥有者的重定向获得授权信息。</li>
+<li>Token端点：客户端向权限服务器获取access token。</li>
+</ul>
+
+
+<p>还存在一个client的端点：</p>
+
+<ul>
+<li>重定向端点：权限服务器向客户端返回授权的凭证。</li>
+</ul>
+
+
+<h2>3.1 Authorization Endpoint（授权端点）</h2>
+
+<p>授权端点是权限服务器和资源拥有者交互以便获得授权信息的端点。权限服务器必须验证资源拥有者的身份，通过何种方式（用户名、密码，会话cookie）验证超出该协议范围。</p>
+
+<p>Client通过何种方式获取权限服务器授权端点的路径超出了讨论范围，不过一般都会在权限服务器的文档中说明。</p>
+
+<p>端点的URI可能包含一个&#8221;application/x-www-form-urlencoded&#8221;格式的查询组件，当添加额外参数时必须保留这个组件。端点URI中不能包括不完整的查询组件。</p>
+
+<p>由于发往授权端点的请求将导致明文传输的授权凭证，权限服务器必须要求客户端建立TLS的请求。</p>
+
+<p>权限服务器必须支持Http Get方法，同样可以支持POST方法。</p>
+
+<p>不包含值得参数必须忽略对待，服务器必须忽略不认识的参数。请求和响应中的参数不得出现超过一次。</p>
+
+<h3>3.1.1 Response Type （响应类型）</h3>
+
+<p>授权端点是为授权码类型和简化类型的授权服务的，客户端使用以下参数知会服务器其期望的授权类型：</p>
+
+<p>response_type：必须。必须是<a href="http://tools.ietf.org/html/rfc6749#section-4.1.1">章节4.1.1</a>中描述的&#8221;code&#8221;、<a href="http://tools.ietf.org/html/rfc6749#section-4.2.1">章节4.2.1</a>描述的获取access token的“token”或者<a href="http://tools.ietf.org/html/rfc6749#section-8.4">章节8.4</a>描述的已注册的扩展值之一。</p>
+
+<p>扩展响应类型可能保护一个空格(%x20)分隔的的类别，其中值是顺序无关的，这部分响应类型的意义定义在其对应的协议中。</p>
+
+<p>如果一个请求没有或者提供了不可识别的响应类型，权限服务器必须返回<a href="http://tools.ietf.org/html/rfc6749#section-4.1.2.1">4.1.2.1</a>中描述的错误。</p>
+
+<h3>3.1.2 Redirection Point（重定向端点）</h3>
+
+<p>权限服务器完成与资源拥有者的交互后，需要将资源拥有者的访问器重定向到客户端。服务器将重定向到在客户端注册过程中或者是申请权限时指定的位置。</p>
+
+<p>重定向URI必须是<a href="http://tools.ietf.org/html/rfc3986#section-4.3">[RFC3986] Section 4.3</a>中定义的绝对路径的URI。该URI中可能包含&#8221;application/x-www-form-urlencoded&#8221;格式的查询部分，当添加额外的参数时必须保留该查询部分。URI中不能包含不完整的部分。</p>
+
+<h4>3.1.2.1 Endpoint Request Confidentiality（端点请求的机密性）</h4>
+
+<p>当响应类型是“code”或者“token”，或是重定向结果将导致敏感凭证在公网上传输时，重定向端点要求是TLS。该协议没有正式要求使用TLS，因为在该协议写作时期，使用TLS对客户端开发者来说可能是一个重大障碍。如果彼时TLS不可用，权限服务器需要在重定向之前警告资源拥有者正在导向不安全的URI。</p>
+
+<p>TLS的缺乏将对客户端和保护的资源造成严重影响。当客户端使用代理最终用户的授权模式（如第三方登录）时，TLS的使用显得尤为重要。</p>
+
+<h4>3.1.2.2 Registration Requirement（注册要求）</h4>
+
+<p>权限服务器要求以下两种客户端必须注册它们的重定向端点：</p>
+
+<ul>
+<li>公共客户端。</li>
+<li>采用简化模式的机密客户端。</li>
+</ul>
+
+
+<p>权限服务器要求所有客户端在调用授权端点以前必须注册它们的重定向端点。</p>
+
+<p>权限服务器要求客户端提供完整的重定向URI（客户端可以使用“state”参数实现每个URL的自定义）。如果无法提供完整的重定向URI，客户端至少要提供URI模式、权限和路径（只允许查询部分是可以变化的）。</p>
+
+<p>权限服务器允许客户端注册多个重定向端点。</p>
+
+<p>如果客户端注册缺少了重定向，攻击者可以把授权端点当做open redirector使用<a href="http://tools.ietf.org/html/rfc6749#section-10.15">10.15</a>。</p>
+
+<h4>3.1.2.3 Dynamic Configuration（动态配置）</h4>
+
+<p>如果注册多个重定向URI、或者注册了部分URI、或者未注册URI，客户端在发送授权请求是要包含“redirect_uri&#8221;的参数。</p>
+
+<p>如果注册了任何URI，权限服务器接收到&#8221;redirect_uri&#8221;参数时需确定其值至少匹配某一条已注册的URI。如果注册时使用了全URI，权限服务器须使用简单的文本比对方法确定两者一致。</p>
+
+<h4>3.1.2.4 Invalid Endpoint(非法端点)</h4>
+
+<p>如果授权请求缺少、非法、不匹配注册的URI，权限服务器需要通知资源拥有者并中断自动重定向。</p>
+
+<h4>3.1.1.5 Endpoint Content（端点内容）</h4>
+
+<p>指向Client的重定向请求一般会返回HTML的响应，该响应会由浏览器处理。如果该HTML直接作为请求的响应返回，其中的脚本将对重定向URI和包含的凭证有完全访问权。</p>
+
+<p>客户端应该确保响应不包含第三方的脚本（统计脚本、社交插件等）。取而代之，它应该抽取重定向URI中包含的凭证，并返回浏览器另一个URI以免暴露凭证。如果要包含第三方脚本，客户端需要确保自己的脚本优先运行。</p>
+
+<h2>3.2 Token Point（Token端点）</h2>
+
+<p>Token端点用于客户端使用授权码或刷新Token获取access token。Token服务于除使用简化流程（因为直接发布了access token）以外的所有授权方式。</p>
+
+<p>客户端如何获得Token端点的地址不在讨论范围，但一般可以在文档中获得。</p>
+
+<p>如果端点URI包含&#8221;application/x-www-form-urlencoded&#8221;格式的查询部分则必须保存，不得包含不完整的查询。</p>
+
+<p>由于涉及明文传输凭证，在发起请求时必须使用TLS。</p>
+
+<p>客户端必须使用POST方法发起access token的请求。</p>
+
+<p>客户端发起请求时不包含值得参数必须忽略。权限服务器需要忽略未知的参数。统一参数在请求中只能出现一次。</p>
+
+<h3>3.2.1 Client Authentication（客户端鉴权）</h3>
+
+<p>机密客户端或者其它发布凭证的客户端在发起Token端点请求前，必须要向权限服务器鉴权。客户端鉴权用于：</p>
+
+<ul>
+<li>强制绑定发布给其的授权码和刷新Token。当使用不安全通道传递授权码或者没有注册完全重定向URI时，客户端鉴权显得尤为重要。</li>
+<li>恢复被禁用或者变更用户凭证的客户端，避免攻击者滥用偷得的刷新Token。改变单一的客户端凭证比作废全部刷新Token快得多。</li>
+<li>实现鉴权管理最佳实践，需要定期凭证流转。实现全部刷新Token的流转是很具挑战的，相比实现一组用户凭着的流转更容易。</li>
+</ul>
+
+
+<p>向Token端点发起请求时客户单可使用&#8221;client_id&#8221;的参数表明其身份。发起“授权码”、“授权类型”的请求时，未鉴权的客户端必须发送“client_id”以免接受了本应该发给另一个客户单的信息。</p>
+
+<h2>3.3 Access Token Scope（Access Token范围）</h2>
+
+<p>授权和Token端点允许客户端使用“scope”参数指明请求的访问范围。反之，权限服务器在响应中使用“scope”参数指明所发布的token的范围。</p>
+
+<p>“scope”的值使用空格分隔、大小写敏感的字符串列表表示。如果列表包含多条空格分隔，它们是顺序无关的，并且每条记录指示一个范围。</p>
+
+<pre><code>scope       = scope-token *( SP scope-token )
+scope-token = 1*( %x21 / %x23-5B / %x5D-7E )
+</code></pre>
+
+<p>权限服务器可以全部或者部分的忽略客户端请求的范围，取决于全新服务器的策略或者资源拥有者的指令。如果响应范围和请求范围不同，权限服务器必须包含“scope”参数指明其发布的access token范围。</p>
+
+<p>如果客户端请求省略了“scope”参数，服务器必须按照预设的范围或者失败本次请求。权限服务器应该文档化其的范围和默认值。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Oauth2 Specification Client Registration]]></title>
+    <link href="http://gangzz.github.io/blog/2015/02/18/oauth2-specification-client-registration/"/>
+    <updated>2015-02-18T11:56:02+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/02/18/oauth2-specification-client-registration</id>
+    <content type="html"><![CDATA[<h1>2. Client Registration</h1>
+
+<p>开始启动协议之前，Client要在权限服务器注册自己。通过何种方式注册超出了该协议讨论范围，当时通常是通过HTML页面和终端用户交互。</p>
+
+<p>协议中不曾规定客户端的注册必须直接与权限服务器交互，只要权限服务器支持，注册可以通过任何方式以便建立可信的关系或者获取必要的客户端属性（比如重定向URL、客户端类型等）。比如注册可以通过自发布或者第三方发布的校验机制完成，或者是权限服务器使用可信的渠道发现客户端。</p>
+
+<p>当注册一个客户端的时应该：</p>
+
+<ol>
+<li>指明章节2.1中规定的客户端类型。</li>
+<li>提供章节3.1.2中规定的重定向URL。</li>
+<li>包含其他权限服务器要求的信息（应用名称、网站、描述、logo、接受的法律条款等）。</li>
+</ol>
+
+
+<h2>2.1 客户端类型</h2>
+
+<p>OAuth根据与权限服务器达成安全认证的能力，定义了两种客户端类型（比如保存它们客户端凭证机密性的能力）。</p>
+
+<p><strong>机密</strong>
+客户端能够保证它们客户端凭证的机密性（比如客户端实现了严格限制凭证访问的安全服务器），或能通过其它途径保证它们授权的安全。</p>
+
+<p><strong>公共</strong>
+客户端不能够保证凭证的机密性(客户端运行在资源拥有者的设备上，比如安装的本地应用或是浏览器应用)，也没有其它途径保证安全。</p>
+
+<p>权限服务器关于安全的定义和其可接受的客户端机密暴露级别决定了客户端的类型。权限服务器绝对不应该对客户端的类型有任何假设。</p>
+
+<p>一个客户端（Client）可以是一组分布式的组件，每个组件有自己的客户端类型和安全环境（比如一个客户端保护一个基于服务器的机密组件和一个公共的浏览器客户端）。如果一个权限服务器不支持或者没有提供任何相关的指导，客户端应该分别注册自己的每个组件。</p>
+
+<p>该协议是根据下面的各方面设计的：</p>
+
+<ul>
+<li><p>web application（网络应用）
+网络应用是一个机密的运行于服务器的应用。资源拥有者使用运行在其设备上的客户端（浏览器）通过HTML页面进行访问。发布给客户端的用户凭证和Access Token一样都保存在服务器端，对资源拥有者是不可见的。</p></li>
+<li><p>user-agent-based application</p></li>
+</ul>
+
+
+<p>客户端应用是从服务器下载并在资源拥有者所使用设备上的客户端（如浏览器）运行应用。协议和凭证数据能够轻易地被资源拥有者访问到。因为该类应用驻留在用户客户端（浏览器）中，它们能够很容易的利用容器的能力实现授权。</p>
+
+<ul>
+<li>native application</li>
+</ul>
+
+
+<p>本地应用是安装和运行在用户设备本地的应用。协议数据和凭证可以被资源拥有者访问到。一般假设应用中的任何授权信息都是可以被抽取的。另一方面，动态发布的凭证（access token和refresh token）可以在安全方面达到一定的可接受度。至少，可以抵御与该客户端交互的某些敌意的服务器。在一些平台上，可以防止同设备上其它应用的访问。</p>
+
+<h2>2.2   客户端身份（Id）</h2>
+
+<p>权限服务器发布给注册的客户端一个身份——一个代表了客户端信息的唯一字符串。这个身份不是加密的，它对资源拥有者是可见的，不能使用这个Id进行授权。客户端Id在一个权限服务器中是唯一的。</p>
+
+<p>该协议并未规定Id的长度，客户端不应该猜测其长度。资源服务应该对其发布的任何Id进行说明。</p>
+
+<h2>2.3 Client Authorization（客户端授权）</h2>
+
+<p>如果客户端类型是机密，客户端和服务器会建立适合的安全方法达到服务器的安全要求。权限服务器可能接受客户端任何符合安全要求的数据。</p>
+
+<p>机密类型的客户端可能被权限服务器授予一系列的凭证，用于授权（如用户名密码、共有/私有的key值对）。</p>
+
+<p>权限服务器可能和公共类型的客户端建立授权方法，但是权限服务器不能依赖公共方法确定客户端的身份。</p>
+
+<p>在每个请求中只能调用一个方法。</p>
+
+<h3>2.3.1 Client Password （客户端密码）</h3>
+
+<p>使用密码的客户端可能通过基本的Http授权方式向权限服务器请求授权<a href="http://tools.ietf.org/html/rfc2617">RFC2617</a>。客户端Id使用&#8221;application/x-www-form-urlencoded&#8221;编码并使用username作为Key，密码使用同样地编码方式并使用password作为Key。权限服务器必须支持基本Http授权的模式。</p>
+
+<p>举例：
+Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3</p>
+
+<p>可选的，权限服务器可以支持使用Request_Body中包含参数的方式：</p>
+
+<ul>
+<li>client_id</li>
+</ul>
+
+
+<p>必须。客户端Id在注册过程中发布给客户端（2.2节）。</p>
+
+<ul>
+<li>client_secret
+必须。client secret。当其为空时客户端可以忽略这个参数。</li>
+</ul>
+
+
+<p>一般不推荐使用Rquest_Body的方式，而且应该仅限在客户端无法使用基本Http授权机制（和其它的授权机制）时。参数只能包含在RequestBody中，不能通过URI传递。</p>
+
+<p>举例，使用RequestBody刷新AccessToken的请求：</p>
+
+<pre><code> POST /token HTTP/1.1
+ Host: server.example.com
+ Content-Type: application/x-www-form-urlencoded
+
+ grant_type=refresh_token&amp;refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
+ &amp;client_id=s6BhdRkqt3&amp;client_secret=7Fjfp0ZBr1KtDRbnfVdmIw
+</code></pre>
+
+<p>在使用密码进行授权时，权限服务器必须要求使用TLS（在6.1节中描述）。</p>
+
+<p>因为这种机制引入了密码，权限服务器必须保护它以免任何终端利用暴力攻击的方式。</p>
+
+<h3>2.3.2 其它授权方法</h3>
+
+<p>权限服务器可选择任何满足安全要求的Http授权机制。当使用其它授权方法时，权限服务器必须定义客户端Id和授权机制直接的映射。</p>
+
+<h3>2.3.3 未注册用户</h3>
+
+<p>该协议不排除未注册客户端的使用，但是相关讨论超出了协议范围，并且需要额外的安全分析和重新审视对互操作性的冲突。</p>
+]]></content>
+  </entry>
+  
+</feed>
