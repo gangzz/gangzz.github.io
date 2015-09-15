@@ -7,7 +7,7 @@ categories: ["others","flume"]
 ---
 
 
-![Flume结构](resources/201509/UserGuide_image00.png)
+![Flume结构](/images/blog/20150915/UserGuide_image00.png)
 
 FileChannel是Flume Channel的一种基于文件系统的实现，能够直接持久化消息（FlumeEvent）到文件系统中。
 
@@ -26,7 +26,7 @@ FileChannel的参数包含但不限于以下几个主要参数
 
 以下将从效率、可靠性、事务、更新策略上介绍FileChannel设计及其文件系统的利用。
 
-![文件数据组织结构](resources/201509/fs_structure.png)
+![文件数据组织结构](/images/blog/20150915/fs_structure.png)
 
 ### data Dirs
 
@@ -67,7 +67,7 @@ FileChannel通过FlumeEventQueue管理了记录位置和支持事务。
 在每次文件滚动时会尝试删除无用的log-n文件，Id从N-2开始的文件会在本轮被标记、在下一轮roll的过程中删除，N为滚动产生的最新log id。
 
 ## 类图结构
-![FileChannel类图](resources/201509/FileChannelClasses.png)
+![FileChannel类图](/images/blog/20150915/FileChannelClasses.png)
 
 * Channel 接口封装。
 * BasicChannelSemantics 提供了基于事务的Channel的底层框架，子类需要实现createTransaction方法。
