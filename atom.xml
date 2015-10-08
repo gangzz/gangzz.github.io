@@ -4,7 +4,7 @@
   <title><![CDATA[It's gangzz!]]></title>
   <link href="http://gangzz.github.io/atom.xml" rel="self"/>
   <link href="http://gangzz.github.io/"/>
-  <updated>2015-09-16T00:00:30+08:00</updated>
+  <updated>2015-10-09T00:11:21+08:00</updated>
   <id>http://gangzz.github.io/</id>
   <author>
     <name><![CDATA[Willard]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Storm和ES的简单推荐功能实现]]></title>
+    <link href="http://gangzz.github.io/blog/2015/10/09/stormhe-esde-jian-dan-tui-jian-gong-neng-shi-xian/"/>
+    <updated>2015-10-09T00:07:50+08:00</updated>
+    <id>http://gangzz.github.io/blog/2015/10/09/stormhe-esde-jian-dan-tui-jian-gong-neng-shi-xian</id>
+    <content type="html"><![CDATA[<h2>说明</h2>
+
+<p>本文只实现一个最基本推荐功能，其可以实时分析用户的行为并据此提取推荐线索，从而根据最新的用户线索利用搜索引擎获取推荐结果。</p>
+
+<p>本策略缺少以下基本能力：</p>
+
+<ul>
+<li>被推荐物品之间缺乏关联关系，某种意义上不能推荐与当前物品相似的物品。</li>
+<li>只对用户行为进行定性分析，非定量。比如用户看了“口腔溃疡”十次、看了“感冒一次”，这两者却获得了相同的加权。</li>
+<li>缺乏推荐后用户行为的反馈。</li>
+</ul>
+
+
+<h2>实现思路</h2>
+
+<p>该推荐功用于“轻问诊”场景中向用户推荐感兴趣的医生。基本思路是把用户的行为日志逐条读入Storm中，根据用户当前关心的疾病名、医生科室线索推荐符合条件的医生给用户。</p>
+
+<p><strong>用户行为日志来源</strong>： 来自为App提供数据接口的服务器，拦截用户的全部请求并抽取requestUrl和requestParameters就满足了获取用户（userId）感兴趣的疾病或科室（请求参数）的目标。</p>
+
+<p><strong>日志传输路径</strong>：log -（flume）-> Kafka &ndash;> Storm &ndash;> Redis &ndash;> ElasticSearch。</p>
+
+<h2>具体实现</h2>
+
+<h3>各组件物理拓扑</h3>
+
+<p><img src="http://gangzz.github.io/images/blog/20151009/LogicTopology.png" alt="各个组件的物理拓扑图" /></p>
+
+<p>图中分为绿色线条和红色线条两部分。</p>
+
+<p>绿色线条部分是用户的行为日志处理：</p>
+
+<ol>
+<li>首先使用拦截器拦截所有用户请求，整理出必需参数交给logback记录日志——此处包含两个Appender：RollFileAppender和FlumeAppender，前者是传统日志文件（存本地），后者是日志收集组件（Flume）能够在保证可靠性的前提下高效地将多个host的日志汇聚到Flume Agent处，再由Flume Agent提交给kafka。</li>
+<li>Storm通过KafkaSpout逐条抽取提交到消息服务的日志并实时处理，处理结果根据UserId生成唯一Key保存在Redis中供推荐服务查询。</li>
+</ol>
+
+
+<p>红色部分是推荐行为：</p>
+
+<ol>
+<li>用户触发推荐行为后服务器根据UserId从Redis获取所有该用户的推荐线索——疾病名称、科室Id等。</li>
+<li>LogicalServer根据当前用户的线索，生成合适的查询条件调用搜索引擎获取推荐结果。比如：根据疾病名在医生擅长项目中查找、根据科室线索筛选口碑好的医生等。</li>
+</ol>
+
+
+<p>除此之外用户的行为日志具有时效性，在Storm处理过程中会保留用户日志的原始数据，根据日志发生时间判断是否要将某一条日志保留或删除。</p>
+
+<h3>Storm中的Topology</h3>
+
+<p><img src="http://gangzz.github.io/images/blog/20151009/DoctRmdTopology.png" alt="医生推荐Topology" /></p>
+
+<p>进入Kafka的数据格式是未经处理的日志数据（包括logback的layout处理），本部分首先开发了一个根据layout信息逆转日志为结构化数据的工具（暂时命名为log-delayout，未来日志介绍）用来把日志转换成结构化的数据。</p>
+
+<p>ApiLogToMapBolt负责文本日志到结构化数据的转换，除此之外ApiLogToMapBolt还起到过滤的作用把不感兴趣的日志直接排除掉，减轻系统负担。</p>
+
+<p>从ApiLogToMapBolt出来的Tuple会根据Url的特征值分发到DiseaseHintBolt（疾病）或StdDeptHintBolt（科室）中，在这两个Bolt中完成关键信息的提取过程——提取疾病或科室Id、更新数据到Redis中、同时删除已经超过时效性的记录。</p>
+
+<p>最后通知HintsRefreshBolt根据最新的用户特征刷新推荐信息，以便下次服务器查询时能够获得最新的推荐条件。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flume FileChannel 源码]]></title>

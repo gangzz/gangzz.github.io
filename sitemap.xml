@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://gangzz.github.io/blog/2015/10/09/stormhe-esde-jian-dan-tui-jian-gong-neng-shi-xian/</loc>
+    <lastmod>2015-10-09T00:07:50+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://gangzz.github.io/blog/2015/09/15/flume-filechannel-yuan-ma/</loc>
     <lastmod>2015-09-15T23:14:58+08:00</lastmod>
   </url>
@@ -50,14 +54,14 @@
   </url>
   <url>
     <loc>http://gangzz.github.io/about.html</loc>
-    <lastmod>2015-09-16T00:00:30+08:00</lastmod>
+    <lastmod>2015-10-09T00:11:21+08:00</lastmod>
   </url>
   <url>
     <loc>http://gangzz.github.io/blog/archives/</loc>
-    <lastmod>2015-09-16T00:00:30+08:00</lastmod>
+    <lastmod>2015-10-09T00:11:21+08:00</lastmod>
   </url>
   <url>
     <loc>http://gangzz.github.io/</loc>
-    <lastmod>2015-09-16T00:00:30+08:00</lastmod>
+    <lastmod>2015-10-09T00:11:21+08:00</lastmod>
   </url>
 </urlset>

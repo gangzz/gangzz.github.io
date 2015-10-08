@@ -9,9 +9,7 @@
   <meta name="author" content="Willard">
 
   
-  <meta name="description" content="OAuth 2.0 1.1 Role Resource Owner：资源的拥有者，当资源拥有者指人的时候一般是终端用户。
-Resource Server：资源不熟的服务器。负责响应合法Access_Token的资源请求。
-Client：请求资源的客户端，可以使其它应用的服务器、桌面应用、其它设备等 &hellip;">
+  <meta name="description" content="2. Client Registration 开始启动协议之前，Client要在权限服务器注册自己。通过何种方式注册超出了该协议讨论范围，当时通常是通过HTML页面和终端用户交互。 协议中不曾规定客户端的注册必须直接与权限服务器交互，只要权限服务器支持， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +69,142 @@ Client：请求资源的客户端，可以使其它应用的服务器、桌面�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/18/oauth2-specification-client-registration/">Oauth2 Specification Client Registration</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-18T11:56:02+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:56 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>2. Client Registration</h1>
+
+<p>开始启动协议之前，Client要在权限服务器注册自己。通过何种方式注册超出了该协议讨论范围，当时通常是通过HTML页面和终端用户交互。</p>
+
+<p>协议中不曾规定客户端的注册必须直接与权限服务器交互，只要权限服务器支持，注册可以通过任何方式以便建立可信的关系或者获取必要的客户端属性（比如重定向URL、客户端类型等）。比如注册可以通过自发布或者第三方发布的校验机制完成，或者是权限服务器使用可信的渠道发现客户端。</p>
+
+<p>当注册一个客户端的时应该：</p>
+
+<ol>
+<li>指明章节2.1中规定的客户端类型。</li>
+<li>提供章节3.1.2中规定的重定向URL。</li>
+<li>包含其他权限服务器要求的信息（应用名称、网站、描述、logo、接受的法律条款等）。</li>
+</ol>
+
+
+<h2>2.1 客户端类型</h2>
+
+<p>OAuth根据与权限服务器达成安全认证的能力，定义了两种客户端类型（比如保存它们客户端凭证机密性的能力）。</p>
+
+<p><strong>机密</strong>
+客户端能够保证它们客户端凭证的机密性（比如客户端实现了严格限制凭证访问的安全服务器），或能通过其它途径保证它们授权的安全。</p>
+
+<p><strong>公共</strong>
+客户端不能够保证凭证的机密性(客户端运行在资源拥有者的设备上，比如安装的本地应用或是浏览器应用)，也没有其它途径保证安全。</p>
+
+<p>权限服务器关于安全的定义和其可接受的客户端机密暴露级别决定了客户端的类型。权限服务器绝对不应该对客户端的类型有任何假设。</p>
+
+<p>一个客户端（Client）可以是一组分布式的组件，每个组件有自己的客户端类型和安全环境（比如一个客户端保护一个基于服务器的机密组件和一个公共的浏览器客户端）。如果一个权限服务器不支持或者没有提供任何相关的指导，客户端应该分别注册自己的每个组件。</p>
+
+<p>该协议是根据下面的各方面设计的：</p>
+
+<ul>
+<li><p>web application（网络应用）
+网络应用是一个机密的运行于服务器的应用。资源拥有者使用运行在其设备上的客户端（浏览器）通过HTML页面进行访问。发布给客户端的用户凭证和Access Token一样都保存在服务器端，对资源拥有者是不可见的。</p></li>
+<li><p>user-agent-based application</p></li>
+</ul>
+
+
+<p>客户端应用是从服务器下载并在资源拥有者所使用设备上的客户端（如浏览器）运行应用。协议和凭证数据能够轻易地被资源拥有者访问到。因为该类应用驻留在用户客户端（浏览器）中，它们能够很容易的利用容器的能力实现授权。</p>
+
+<ul>
+<li>native application</li>
+</ul>
+
+
+<p>本地应用是安装和运行在用户设备本地的应用。协议数据和凭证可以被资源拥有者访问到。一般假设应用中的任何授权信息都是可以被抽取的。另一方面，动态发布的凭证（access token和refresh token）可以在安全方面达到一定的可接受度。至少，可以抵御与该客户端交互的某些敌意的服务器。在一些平台上，可以防止同设备上其它应用的访问。</p>
+
+<h2>2.2   客户端身份（Id）</h2>
+
+<p>权限服务器发布给注册的客户端一个身份——一个代表了客户端信息的唯一字符串。这个身份不是加密的，它对资源拥有者是可见的，不能使用这个Id进行授权。客户端Id在一个权限服务器中是唯一的。</p>
+
+<p>该协议并未规定Id的长度，客户端不应该猜测其长度。资源服务应该对其发布的任何Id进行说明。</p>
+
+<h2>2.3 Client Authorization（客户端授权）</h2>
+
+<p>如果客户端类型是机密，客户端和服务器会建立适合的安全方法达到服务器的安全要求。权限服务器可能接受客户端任何符合安全要求的数据。</p>
+
+<p>机密类型的客户端可能被权限服务器授予一系列的凭证，用于授权（如用户名密码、共有/私有的key值对）。</p>
+
+<p>权限服务器可能和公共类型的客户端建立授权方法，但是权限服务器不能依赖公共方法确定客户端的身份。</p>
+
+<p>在每个请求中只能调用一个方法。</p>
+
+<h3>2.3.1 Client Password （客户端密码）</h3>
+
+<p>使用密码的客户端可能通过基本的Http授权方式向权限服务器请求授权<a href="http://tools.ietf.org/html/rfc2617">RFC2617</a>。客户端Id使用&#8221;application/x-www-form-urlencoded&#8221;编码并使用username作为Key，密码使用同样地编码方式并使用password作为Key。权限服务器必须支持基本Http授权的模式。</p>
+
+<p>举例：
+Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3</p>
+
+<p>可选的，权限服务器可以支持使用Request_Body中包含参数的方式：</p>
+
+<ul>
+<li>client_id</li>
+</ul>
+
+
+<p>必须。客户端Id在注册过程中发布给客户端（2.2节）。</p>
+
+<ul>
+<li>client_secret
+必须。client secret。当其为空时客户端可以忽略这个参数。</li>
+</ul>
+
+
+<p>一般不推荐使用Rquest_Body的方式，而且应该仅限在客户端无法使用基本Http授权机制（和其它的授权机制）时。参数只能包含在RequestBody中，不能通过URI传递。</p>
+
+<p>举例，使用RequestBody刷新AccessToken的请求：</p>
+
+<pre><code> POST /token HTTP/1.1
+ Host: server.example.com
+ Content-Type: application/x-www-form-urlencoded
+
+ grant_type=refresh_token&amp;refresh_token=tGzv3JOkF0XG5Qx2TlKWIA
+ &amp;client_id=s6BhdRkqt3&amp;client_secret=7Fjfp0ZBr1KtDRbnfVdmIw
+</code></pre>
+
+<p>在使用密码进行授权时，权限服务器必须要求使用TLS（在6.1节中描述）。</p>
+
+<p>因为这种机制引入了密码，权限服务器必须保护它以免任何终端利用暴力攻击的方式。</p>
+
+<h3>2.3.2 其它授权方法</h3>
+
+<p>权限服务器可选择任何满足安全要求的Http授权机制。当使用其它授权方法时，权限服务器必须定义客户端Id和授权机制直接的映射。</p>
+
+<h3>2.3.3 未注册用户</h3>
+
+<p>该协议不排除未注册客户端的使用，但是相关讨论超出了协议范围，并且需要额外的安全分析和重新审视对互操作性的冲突。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -361,6 +495,10 @@ bundle install
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/09/stormhe-esde-jian-dan-tui-jian-gong-neng-shi-xian/">Storm和ES的简单推荐功能实现</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/15/flume-filechannel-yuan-ma/">Flume FileChannel 源码</a>
       </li>
     
@@ -374,10 +512,6 @@ bundle install
     
       <li class="post">
         <a href="/blog/2015/07/19/chrome-extension-overview/">Chrome Extension Overview</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/26/svn-serverda-jian/">Svn Server搭建</a>
       </li>
     
   </ul>
